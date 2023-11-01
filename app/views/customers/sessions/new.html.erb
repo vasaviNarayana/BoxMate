@@ -1,0 +1,26 @@
+<h1>Customer Login</h1>
+
+<%= form_for :session, url: customers_login_path do |f| %>
+  <%= render 'shared/error_messages' %>
+
+  <div class="field">
+    <%= label_tag :email %>
+    <%= f.email_field :email %>
+  </div>
+
+  <div class="field">
+    <%= label_tag :password %>
+    <%= f.password_field :password %>
+  </div>
+
+  <div class="field">
+    <%= f.check_box :customer, class: 'form-check-input' %>
+    <%= label_tag :customer, class: 'form-check-label' do %>
+      I am a customer
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit 'Log In', class: 'btn btn-primary' %>
+  </div>
+<% end %>

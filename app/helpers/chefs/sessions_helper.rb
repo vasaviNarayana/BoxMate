@@ -1,0 +1,2 @@
+module Chefs::SessionsHelper
+end
