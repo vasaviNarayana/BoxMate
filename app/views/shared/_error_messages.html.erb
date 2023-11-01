@@ -1,12 +1,10 @@
-<% if object.errors.any? %>
-  <div id="error_explanation">
-    <div class="alert alert-danger">
-      The following errors prevented the form from being saved:
-      <ul>
-        <% object.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
+<% if object.present? && object.errors.any? %>
+  <div class="error-message">
+    <h2><%= pluralize(object.errors.count, 'error') %> prohibited this from being saved:</h2>
+    <ul>
+      <% object.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
   </div>
 <% end %>

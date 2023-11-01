@@ -1,7 +1,7 @@
 class Chefs::RegistrationsController < ApplicationController
   def new
     @chef = Chef.new
-end
+  end
 
   def create
   end
