@@ -88,7 +88,7 @@
     <div class="form-container">
       <h1>Customer Login</h1>
       <img src="<%= asset_path('customer-image.png') %>" alt="Customer Image" class="customer-image">
-      <%= form_for method="post", url: customers_login_path do |f| %>
+      <%= form_for @customer || Customer.new, url: customers_login_path, method: :post, data: { no_turbolink: true } do |f| %>
         <div class="field">
           <%= f.label :username %>
           <%= f.text_field :username %>

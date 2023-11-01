@@ -1,0 +1,17 @@
+<% if flash[:success] %>
+  <div class="alert alert-success" role="alert" id="success">
+    <%= flash[:success] %>
+  </div>
+<% elsif flash[:danger] %>
+  <div class="alert alert-danger" role="alert" id="danger">
+    <%= flash[:danger] %>
+  </div>
+<% elsif flash[:notice] %>
+  <div class="alert alert-info" role="alert" id="notice">
+    <%= flash[:notice] %>
+  </div>
+<% elsif flash[:warning] %>
+  <div class="alert alert-danger" role="alert" id="warning">
+    <%= flash[:warning] %>
+  </div>
+<% end %>

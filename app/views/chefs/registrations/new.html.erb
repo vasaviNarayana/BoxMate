@@ -82,7 +82,7 @@
     <div class="form-container">
       <h1>Sign Up as a Chef</h1>
       <img src="<%= asset_path('chef-image.jpeg') %>" alt="Chef Image" class="chef-image">
-      <%= form_for @chef, url: chefs_signup_path do |f| %>
+      <%= form_for @chef || Chef.new, url: chefs_signup_path do |f| %>
         <div class="field">
           <%= f.label :username %>
           <%= f.text_field :username %>

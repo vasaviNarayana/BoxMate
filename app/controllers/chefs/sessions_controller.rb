@@ -4,9 +4,9 @@ class Chefs::SessionsController < ApplicationController
   end
 
   def create
-    @chef = Chef.find_by(username: params[:username])
+    @chef = Chef.find_by(username: params[:chef][:username])
 
-    if @chef && @chef.authenticate(params[:password])
+    if @chef && @chef.authenticate(params[:chef][:password])
       # Successful login
       flash[:success] = 'Login successful!'
       redirect_to chefs_dashboard_path
