@@ -11,7 +11,7 @@ class Customers::SessionsController < ApplicationController
         # Successful login
         session[:customer_username] = @customer.username
         flash[:success] = 'Login successful!'
-        redirect_to customers_dashboard_path
+        redirect_to customers_home_path
       else
         # Incorrect password
         flash.now[:danger] = 'Invalid password. Please try again.'
@@ -25,5 +25,7 @@ class Customers::SessionsController < ApplicationController
   end
 
   def destroy
+    session[:customer_username] = nil
+    redirect_to root_path, notice: 'Logged out successfully'
   end
 end

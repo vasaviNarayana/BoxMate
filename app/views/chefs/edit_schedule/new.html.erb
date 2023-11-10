@@ -133,7 +133,7 @@
       <%= f.hidden_field :meal_count, value: 1, id: 'meal-count' %>
       <div class="field">
         <%= f.label :date %>
-        <%= f.text_field :date, type: 'date' %>
+        <%= f.text_field :date, type: 'date', min: (Date.today + 2).to_s %> <!-- Set minimum date to 2 days in advance -->
         <div class="mandatory-message" id="date-mandatory-message" style="display: none;">Date is mandatory</div>
       </div>
       <div class="field">
@@ -187,9 +187,9 @@
     <% end %>
 
   <script>
-    # // Function to initialize the form behavior
+    // Function to initialize the form behavior
     function initializeForm() {
-      # // Reset mealCount on script load
+      // Reset mealCount on script load
       let mealCount = 1;
 
       window.addMoreMeals = function () {
@@ -197,7 +197,7 @@
           const mealsContainer = document.getElementById('meals-container');
           const mealGroupTemplate = document.querySelector('.meal-group');
 
-          # // Clone the template and update the IDs
+          // Clone the template and update the IDs
           const mealGroupClone = mealGroupTemplate.cloneNode(true);
           mealGroupClone.id = `meal-group-${mealCount}`;
 
@@ -208,10 +208,10 @@
             input.name = inputName;
             input.id = inputId;
             input.value = '';
-            # // Clear input values for the new meal group
+            // Clear input values for the new meal group
           });
 
-          # // Remove meal button for the cloned group
+          // Remove meal button for the cloned group
           const removeMealLink = document.createElement('div');
           removeMealLink.classList.add('remove-meal');
           removeMealLink.innerText = 'Remove Meal';
@@ -225,14 +225,14 @@
 
           mealCount++;
         } else {
-          # // Set flash message for maximum meals exceeded
+          // Set flash message for maximum meals exceeded
           const flashMessage = document.querySelector('.flash-message');
           flashMessage.innerText = 'Maximum of 5 meals can be added.';
           flashMessage.style.display = 'block';
         }
       };
 
-      # // Function to validate mandatory fields before form submission
+      // Function to validate mandatory fields before form submission
       function validateForm() {
         const mandatoryFields = [
           { name: 'date', label: 'Date' },
@@ -262,12 +262,12 @@
         return valid;
       }
 
-      # // Override the form submission to validate mandatory fields
+      // Override the form submission to validate mandatory fields
       document.querySelector('form').onsubmit = function () {
         return validateForm();
       }
 
-      # // Display flash message if it exists
+      // Display flash message if it exists
       const flashMessage = document.querySelector('.flash-message');
       if (flashMessage.innerText.trim() !== '') {
         flashMessage.style.display = 'block';
@@ -276,12 +276,6 @@
 
     initializeForm();
   </script>
-
-
-    
-
-    
-    
 
   </div>
 </body>

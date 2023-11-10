@@ -8,9 +8,13 @@ Rails.application.routes.draw do
     get 'login', to: 'sessions#new'
     post 'login', to: 'sessions#create'
     delete 'logout', to: 'sessions#destroy'
-    get 'chefs_home', to: 'chefs_home#index'
+    get 'home', to: 'home#index'
     get 'edit_schedule', to: 'edit_schedule#new'
     post 'edit_schedule', to: 'edit_schedule#create'
+    
+    resources :home, only: [:index] do
+      post 'update_schedule', on: :collection
+    end
 
     # Additional chef routes can be defined here
   end
@@ -22,6 +26,7 @@ Rails.application.routes.draw do
     get 'login', to: 'sessions#new'
     post 'login', to: 'sessions#create'
     delete 'logout', to: 'sessions#destroy'
+    get 'home', to: 'home#index'
     # Additional customer routes can be defined here
   end
 

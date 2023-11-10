@@ -1,0 +1,12 @@
+<!-- app/views/chefs/home/_schedule_card.html.erb -->
+<% if @day_schedules.present? %>
+  <% @day_schedules.each do |schedule| %>
+    <div class="card">
+      <h2><%= schedule.meal_time %></h2>
+      <p>Meal: <%= schedule.meal_name %></p>
+      <p>Booked Guests: <%= schedule.booked_num %></p>
+    </div>
+  <% end %>
+<% else %>
+  <p class="no-schedule">No schedule for the selected date.</p>
+<% end %>

@@ -11,7 +11,7 @@ class Chefs::SessionsController < ApplicationController
         # Successful login
         session[:chef_username] = @chef.username
         flash[:success] = 'Login successful!'
-        redirect_to chefs_chefs_home_path
+        redirect_to chefs_home_path
       else
         # Incorrect password
         flash.now[:danger] = 'Invalid password. Please try again.'
@@ -25,6 +25,7 @@ class Chefs::SessionsController < ApplicationController
   end
 
   def destroy
-    # Implement logout logic here
+    session[:chef_username] = nil
+    redirect_to root_path, notice: 'Logged out successfully'
   end
 end

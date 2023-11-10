@@ -1,5 +1,16 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin-bottom: 100px;">
   <div class="container-fluid">
     <%= link_to 'Box Mate', root_path, class: 'navbar-brand' %>
+    <ul class="navbar-nav ml-auto">
+      <% if session[:chef_username].present? %>
+        <li class="nav-item">
+          <%= link_to 'Logout', chefs_logout_path, method: :delete, class: 'nav-link logout-btn' %>
+        </li>
+      <% elsif session[:customer_username].present? %>
+        <li class="nav-item">
+          <%= link_to 'Logout', customers_logout_path, method: :delete, class: 'nav-link logout-btn' %>
+        </li>
+      <% end %>
+    </ul>
   </div>
 </nav>
