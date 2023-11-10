@@ -11,18 +11,29 @@ class Customers::RegistrationsController < ApplicationController
       flash[:success] = 'Sign up successful! You can now log in.'
       redirect_to customers_login_path
     else
-      if @customer.errors[:username].include?("has already been taken")
-        flash.now[:danger] = 'Username is already taken. Please choose a different username.'
+      if Customer.find_by(username: @customer.username)
+        flash[:danger] = 'Username already exists. Please choose a different username or go to the login page.'
+        render 'customer/registrations/new'
       else
-        flash.now[:danger] = 'Sign up failed. Please check your information.'
+        flash[:danger] = 'Sign up failed. Please check your information. All the fields are required!!'
+        render 'customers/registrations/new'
       end
-      render 'customers/registrations/new'
     end
   end
 
   private
 
   def customer_params
-    params.require(:customer).permit(:username, :password, :password_confirmation)
+    params.require(:customer).permit(
+      :full_name,
+      :username,
+      :password,
+      :password_confirmation,
+      :street_address,
+      :apt_number,
+      :city,
+      :state,
+      :pin
+    )
   end
 end

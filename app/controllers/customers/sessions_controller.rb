@@ -6,13 +6,20 @@ class Customers::SessionsController < ApplicationController
   def create
     @customer = Customer.find_by(username: params[:customer][:username])
 
-    if @customer && @customer.authenticate(params[:customer][:password])
-      # Successful login
-      flash[:success] = 'Login successful!'
-      redirect_to customers_dashboard_path
+    if @customer
+      if @customer.authenticate(params[:customer][:password])
+        # Successful login
+        session[:customer_username] = @customer.username
+        flash[:success] = 'Login successful!'
+        redirect_to customers_dashboard_path
+      else
+        # Incorrect password
+        flash.now[:danger] = 'Invalid password. Please try again.'
+        render 'customers/sessions/new'
+      end
     else
-      # Failed login
-      flash.now[:danger] = 'Invalid username or password. Please sign up.'
+      # Username doesn't exist
+      flash.now[:danger] = 'Username does not exist. Please sign up.'
       render 'customers/sessions/new'
     end
   end

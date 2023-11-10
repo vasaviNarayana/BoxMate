@@ -1,0 +1,288 @@
+<!-- app/views/chefs/edit_schedule/new.html.erb -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Schedule</title>
+  <%= csrf_meta_tags %>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    form {
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-sizing: border-box;
+    }
+
+    .actions {
+      margin-top: 20px;
+    }
+
+    .btn-primary {
+      background-color: #FFA500;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: #FF8C00;
+    }
+
+    .error-message {
+      color: #d9534f;
+      margin-top: 10px;
+    }
+
+    .mandatory-message {
+      color: #d9534f;
+      font-size: small;
+      margin-top: 3px;
+    }
+
+    .meal-group {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 3px;
+      margin-top: 10px;
+    }
+
+    .remove-meal {
+      color: #d9534f;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .add-meal-btn {
+      background-color: #5cb85c;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .add-meal-btn:hover {
+      background-color: #4cae4c;
+    }
+
+    .meal-input::placeholder {
+      font-style: italic;
+      color: #ccc;
+      font-size: small;
+    }
+
+    .flash-message {
+      color: #d9534f;
+      background-color: #f2dede;
+      padding: 10px;
+      border-radius: 3px;
+      margin-bottom: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Edit Schedule</h2>
+
+    <!-- Display flash message if it exists -->
+    <div class="flash-message">
+      <% if flash[:danger] %>
+        <%= flash[:danger] %>
+      <% end %>
+    </div>
+
+    <%= form_for @chef_schedule, url: chefs_edit_schedule_path, method: :post do |f| %>
+      <%= f.hidden_field :meal_count, value: 1, id: 'meal-count' %>
+      <div class="field">
+        <%= f.label :date %>
+        <%= f.text_field :date, type: 'date' %>
+        <div class="mandatory-message" id="date-mandatory-message" style="display: none;">Date is mandatory</div>
+      </div>
+      <div class="field">
+        <%= f.label :meal_time %>
+        <%= f.select :meal_time, ['Breakfast', 'Lunch', 'Dinner'], required: true %>
+        <div class="mandatory-message" id="meal-time-mandatory-message" style="display: none;">Meal Time is mandatory</div>
+      </div>
+      <!-- Predefined set of meal input groups -->
+      <% meal_attributes = { meal_name: '', meal_cuisine: '', meal_price: '', max_num: '', meal_recurrence: '' } %>
+      <%= f.fields_for :meals_attributes, meal_attributes do |meal_form| %>
+        <div class="meal-group">
+          <div class="field">
+            <%= meal_form.label :meal_name %>
+            <%= meal_form.text_field :meal_name, class: 'meal-input', placeholder: 'Enter Meal Name', required: true %>
+            <div class="mandatory-message" id="meal-name-mandatory-message" style="display: none;">Meal Name is mandatory</div>
+          </div>
+          <div class="field">
+            <%= meal_form.label :meal_cuisine %>
+            <%= meal_form.text_field :meal_cuisine, class: 'meal-input', placeholder: 'Enter Meal Cuisine', required: true %>
+            <div class="mandatory-message" id="meal-cuisine-mandatory-message" style="display: none;">Meal Cuisine is mandatory</div>
+          </div>
+          <div class="field">
+            <%= meal_form.label :meal_price %>
+            <%= meal_form.text_field :meal_price, class: 'meal-input', placeholder: 'Enter Meal Price', required: true %>
+            <div class="mandatory-message" id="meal-price-mandatory-message" style="display: none;">Meal Price is mandatory</div>
+          </div>
+          <div class="field">
+            <%= meal_form.label :max_num %>
+            <%= meal_form.text_field :max_num, class: 'meal-input', placeholder: 'Enter Max Number', required: true %>
+            <div class="mandatory-message" id="max-num-mandatory-message" style="display: none;">Max Number is mandatory</div>
+          </div>
+          <div class="field">
+            <%= meal_form.label :meal_recurrence %>
+            <%= meal_form.select :meal_recurrence, ['Daily', 'Weekly', 'Monthly', 'None'], class: 'meal-input', required: true %>
+            <div class="mandatory-message" id="meal-recurrence-mandatory-message" style="display: none;">Meal Recurrence is mandatory</div>
+          </div>
+          <!-- Remove meal button for the initial set -->
+          <div class="remove-meal" style="display:none;">Remove Meal</div>
+        </div>
+      <% end %>
+
+      <!-- Container for dynamically added meals -->
+      <div id="meals-container"></div>
+
+      <!-- Add More Meals button -->
+      <button type="button" class="add-meal-btn" onclick="addMoreMeals()">Add More Meals</button>
+      <div class="actions">
+        <%= f.submit 'Add Meals to Schedule', class: 'btn-primary' %>
+      </div>
+      <%= render 'shared/error_messages', object: @chef_schedule %>
+    <% end %>
+
+  <script>
+    # // Function to initialize the form behavior
+    function initializeForm() {
+      # // Reset mealCount on script load
+      let mealCount = 1;
+
+      window.addMoreMeals = function () {
+        if (mealCount <= 4) {
+          const mealsContainer = document.getElementById('meals-container');
+          const mealGroupTemplate = document.querySelector('.meal-group');
+
+          # // Clone the template and update the IDs
+          const mealGroupClone = mealGroupTemplate.cloneNode(true);
+          mealGroupClone.id = `meal-group-${mealCount}`;
+
+          mealGroupClone.querySelectorAll('input, select').forEach(input => {
+            const inputName = input.name.replace(/\[\d\]/, `[${mealCount}]`);
+            const inputId = input.id.replace(/_\d_/, `_${mealCount}_`);
+
+            input.name = inputName;
+            input.id = inputId;
+            input.value = '';
+            # // Clear input values for the new meal group
+          });
+
+          # // Remove meal button for the cloned group
+          const removeMealLink = document.createElement('div');
+          removeMealLink.classList.add('remove-meal');
+          removeMealLink.innerText = 'Remove Meal';
+          removeMealLink.onclick = function () {
+            mealCount--;
+            mealsContainer.removeChild(mealGroupClone);
+          };
+
+          mealGroupClone.appendChild(removeMealLink);
+          mealsContainer.appendChild(mealGroupClone);
+
+          mealCount++;
+        } else {
+          # // Set flash message for maximum meals exceeded
+          const flashMessage = document.querySelector('.flash-message');
+          flashMessage.innerText = 'Maximum of 5 meals can be added.';
+          flashMessage.style.display = 'block';
+        }
+      };
+
+      # // Function to validate mandatory fields before form submission
+      function validateForm() {
+        const mandatoryFields = [
+          { name: 'date', label: 'Date' },
+          { name: 'meal_time', label: 'Meal Time' },
+          { name: 'meal_name', label: 'Meal Name' },
+          { name: 'meal_cuisine', label: 'Meal Cuisine' },
+          { name: 'meal_price', label: 'Meal Price' },
+          { name: 'max_num', label: 'Max Number' },
+          { name: 'meal_recurrence', label: 'Meal Recurrence' }
+        ];
+
+        let valid = true;
+
+        mandatoryFields.forEach(field => {
+          const inputField = document.getElementById(`chef_schedule_${field.name}`);
+          const messageDiv = document.getElementById(`${field.name}-mandatory-message`);
+
+          if (!inputField.value || inputField.value.trim() === '') {
+            messageDiv.innerText = `${field.label} is mandatory`;
+            messageDiv.style.display = 'block';
+            valid = false;
+          } else {
+            messageDiv.style.display = 'none';
+          }
+        });
+
+        return valid;
+      }
+
+      # // Override the form submission to validate mandatory fields
+      document.querySelector('form').onsubmit = function () {
+        return validateForm();
+      }
+
+      # // Display flash message if it exists
+      const flashMessage = document.querySelector('.flash-message');
+      if (flashMessage.innerText.trim() !== '') {
+        flashMessage.style.display = 'block';
+      }
+    }
+
+    initializeForm();
+  </script>
+
+
+    
+
+    
+    
+
+  </div>
+</body>
+</html>

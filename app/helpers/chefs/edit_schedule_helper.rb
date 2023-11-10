@@ -1,0 +1,2 @@
+module Chefs::EditScheduleHelper
+end

@@ -5,23 +5,33 @@ class Chefs::RegistrationsController < ApplicationController
 
   def create
     @chef = Chef.new(chef_params)
-  
+
     if @chef.save
       flash[:success] = 'Sign up successful! You can now log in.'
       redirect_to chefs_login_path
     else
-      if @chef.errors[:username].include?("has already been taken")
-        flash.now[:danger] = 'Username is already taken. Please choose a different username.'
+      if Chef.find_by(username: @chef.username)
+        flash[:danger] = 'Username already exists. Please choose a different username or go to the login page.'
+        render 'chefs/registrations/new'
       else
-        flash.now[:danger] = 'Sign up failed. Please check your information.'
+        flash[:danger] = 'Sign up failed. Please check your information. All the fields are required!!'
+        render 'chefs/registrations/new'
       end
-      render 'chefs/registrations/new'
     end
   end
 
   private
 
   def chef_params
-    params.require(:chef).permit(:username, :password, :password_confirmation)
+    params.require(:chef).permit(
+      :full_name,
+      :username,
+      :password,
+      :street_address,
+      :apt_number,
+      :city,
+      :state,
+      :pin
+    )
   end
 end

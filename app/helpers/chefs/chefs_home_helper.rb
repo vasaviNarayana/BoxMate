@@ -1,0 +1,2 @@
+module Chefs::ChefsHomeHelper
+end

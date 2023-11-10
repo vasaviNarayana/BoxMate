@@ -8,7 +8,10 @@ Rails.application.routes.draw do
     get 'login', to: 'sessions#new'
     post 'login', to: 'sessions#create'
     delete 'logout', to: 'sessions#destroy'
-    get 'dashboard', to: 'dashboard#index'
+    get 'chefs_home', to: 'chefs_home#index'
+    get 'edit_schedule', to: 'edit_schedule#new'
+    post 'edit_schedule', to: 'edit_schedule#create'
+
     # Additional chef routes can be defined here
   end
 
@@ -19,14 +22,11 @@ Rails.application.routes.draw do
     get 'login', to: 'sessions#new'
     post 'login', to: 'sessions#create'
     delete 'logout', to: 'sessions#destroy'
-    get 'dashboard', to: 'dashboard#index'
     # Additional customer routes can be defined here
   end
 
   # Shared routes
   root 'welcome#index'
-  get 'about', to: 'welcome#about'
-  get 'contact', to: 'welcome#contact'
 
   # Define any other shared or global routes here
 

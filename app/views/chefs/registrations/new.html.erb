@@ -23,30 +23,40 @@
       background-color: #fff;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
+      width: 80%; /* Increase the width of the card */
       padding: 20px;
     }
 
+    .fields-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Two columns */
+      gap: 10px; /* Gap between fields */
+    }
+
     .field {
-      margin: 10px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      margin-bottom: 10px;
     }
 
-    label {
+    .field label {
       font-weight: bold;
-      display: inline-block;
-      width: 50%;
-      text-align: right;
+      display: block;
+      text-align: left; /* Align labels to the left */
+      margin-bottom: 5px;
     }
 
-    input[type="text"],
-    input[type="password"] {
+    .field input[type="text"],
+    .field input[type="password"] {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 3px;
+      box-sizing: border-box; /* Include padding and border in the width */
+    }
+
+    .field input::placeholder {
+      font-size: 12px; /* Decrease the font size of the placeholder */
+      font-style: italic; /* Make it italic */
+      color: #aaa; /* Light grey color */
     }
 
     .chef-image {
@@ -56,6 +66,9 @@
 
     .actions {
       margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .btn-primary {
@@ -65,40 +78,73 @@
       border: none;
       border-radius: 3px;
       cursor: pointer;
+      margin-bottom: 10px;
     }
 
     .btn-primary:hover {
       background-color: #FF8C00;
     }
 
-    .error-message {
-      color: #d9534f;
-      margin-top: 10px;
+    .login-message {
+      color: #555;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="form-container">
+      <% if flash[:danger] %>
+        <div class="alert alert-danger">
+          <%= flash[:danger] %>
+        </div>
+      <% end %>
       <h1>Sign Up as a Chef</h1>
       <img src="<%= asset_path('chef-image.jpeg') %>" alt="Chef Image" class="chef-image">
       <%= form_for @chef || Chef.new, url: chefs_signup_path do |f| %>
-        <div class="field">
-          <%= f.label :username %>
-          <%= f.text_field :username %>
-        </div>
-        <div class="field">
-          <%= f.label :password %>
-          <%= f.password_field :password %>
-        </div>
-        <div class="field">
-          <%= f.label :password_confirmation %>
-          <%= f.password_field :password_confirmation %>
+        <div class="fields-container">
+          <div class="field">
+            <%= f.label :username %>
+            <%= f.text_field :username, placeholder: 'Enter your username' %>
+          </div>
+          <div class="field">
+            <%= f.label :password %>
+            <%= f.password_field :password, placeholder: 'Enter your password' %>
+          </div>
+          <div class="field">
+            <%= f.label :password_confirmation %>
+            <%= f.password_field :password_confirmation, placeholder: 'Confirm your password' %>
+          </div>
+          <div class="field">
+            <%= f.label :full_name %>
+            <%= f.text_field :full_name, placeholder: 'Enter your full name' %>
+          </div>
+          <div class="field">
+            <%= f.label :street_address %>
+            <%= f.text_field :street_address, placeholder: 'Enter your street address' %>
+          </div>
+          <div class="field">
+            <%= f.label :apt_number %>
+            <%= f.text_field :apt_number, placeholder: 'Enter your apartment number' %>
+          </div>
+          <div class="field">
+            <%= f.label :city %>
+            <%= f.text_field :city, placeholder: 'Enter your city' %>
+          </div>
+          <div class="field">
+            <%= f.label :state %>
+            <%= f.text_field :state, placeholder: 'Enter your state' %>
+          </div>
+          <div class="field">
+            <%= f.label :pin %>
+            <%= f.text_field :pin, placeholder: 'Enter your PIN code' %>
+          </div>
         </div>
         <div class="actions">
           <%= f.submit 'Sign Up', class: 'btn btn-primary' %>
+          <div class="login-message">
+            Existing User? <%= link_to 'Login', chefs_login_path %>
+          </div>
         </div>
-        <%= render 'shared/error_messages', object: @chef %>
       <% end %>
     </div>
   </div>
